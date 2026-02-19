@@ -17,7 +17,7 @@ from django.db.models import (
     OneToOneField,
     options,
 )
-from django.db.models import UniqueConstraint
+from django.db.models import Index, UniqueConstraint
 from django.db.models.base import ModelBase
 from django.db.models.signals import post_init
 from django.utils.functional import cached_property
@@ -356,10 +356,24 @@ def patch_constraints(model: type[Model], opts: TranslationOptions) -> None:
                             new_constraint.fields = new_fields
                             yield new_constraint
 
+    def add_indexes():
+        for idx in model._meta.indexes:
+            if isinstance(idx, Index):
+                for field_name in opts.fields:
+                    if field_name in idx.fields:
+                        for translated_name in get_translation_fields(field_name):
+                            new_index = deepcopy(idx)
+                            new_fields = list(new_index.fields)
+                            new_fields[new_fields.index(field_name)] = translated_name
+                            new_index.fields = new_fields
+                            new_index.name += f"_{translated_name}"
+                            yield new_index
+
     model._meta.unique_together += tuple(add_unique_together())  # type: ignore[operator]
     model._meta.constraints += tuple(add_constraints())  # type: ignore[operator]
+    model._meta.indexes += list(add_indexes())
     # `unique_together` needs `original_attrs` to be set, for this changes to appear in migrations.
-    for attr_name in ("unique_together",):
+    for attr_name in ("unique_together", "indexes"):
         if value := getattr(model._meta, attr_name):
             model._meta.original_attrs[attr_name] = value
 

@@ -37,7 +37,7 @@ from modeltranslation.utils import (
 )
 
 # How many models are registered for tests.
-TEST_MODELS = 41
+TEST_MODELS = 42
 
 
 class reload_override_settings(override_settings):
@@ -3332,3 +3332,27 @@ class InheritedPermissionTestCase(ModeltranslationTestBase):
         )
         user = User.objects.create(username="123", is_active=True)
         user.has_perm("test_perm")
+
+
+class IndexTranslationTest(TestCase):
+    def test_indexes_patched_for_translated_fields(self):
+        """Test that indexes on translated fields are duplicated for each language."""
+        index_fields = [tuple(idx.fields) for idx in models.ModelWithIndex._meta.indexes]
+        # Original indexes should be present
+        assert ("name",) in index_fields
+        assert ("name", "category") in index_fields
+        # Translated indexes should be present for each language (de and en)
+        assert ("name_de",) in index_fields
+        assert ("name_en",) in index_fields
+        assert ("name_de", "category") in index_fields
+        assert ("name_en", "category") in index_fields
+
+    def test_index_names_contain_translated_field_suffix(self):
+        """Test that translated index names include the translated field suffix."""
+        index_names = [idx.name for idx in models.ModelWithIndex._meta.indexes]
+        assert "name_idx" in index_names
+        assert "name_idx_name_de" in index_names
+        assert "name_idx_name_en" in index_names
+        assert "name_cat_idx" in index_names
+        assert "name_cat_idx_name_de" in index_names
+        assert "name_cat_idx_name_en" in index_names

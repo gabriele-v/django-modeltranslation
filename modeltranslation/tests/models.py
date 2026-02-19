@@ -36,6 +36,17 @@ class ModelWithConstraint(models.Model):
         ]
 
 
+class ModelWithIndex(models.Model):
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["name"], name="name_idx"),
+            models.Index(fields=["name", "category"], name="name_cat_idx"),
+        ]
+
+
 # ######### Proxy model testing
 
 

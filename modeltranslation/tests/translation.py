@@ -29,6 +29,11 @@ class ModelWithConstrainTranslationOptions(TranslationOptions):
     fields = ("sub_title",)
 
 
+@register(models.ModelWithIndex)
+class ModelWithIndexTranslationOptions(TranslationOptions):
+    fields = ("name",)
+
+
 # ######### Proxy model testing
 
 
