@@ -373,7 +373,8 @@ def patch_indexes(model: type[Model], opts: TranslationOptions) -> None:
                             new_index = deepcopy(idx)
                             new_fields = list(new_index.fields)
                             new_fields[new_fields.index(field_name)] = translated_name
-                            new_index.name += f"-{translated_name}"
+                            if new_index.name:
+                                new_index.name += f"-{translated_name}"
                             new_index.fields = new_fields
                             yield new_index
 
