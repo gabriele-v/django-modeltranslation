@@ -315,8 +315,7 @@ field objects on a per-language basis, without having to write manual
 Basic usage
 -----------
 
-Declare ``field_options`` as a class attribute on your
-``TranslationOptions`` subclass:
+Declare ``field_options`` as a class attribute on your ``TranslationOptions`` subclass::
 
     class NewsTranslationOptions(TranslationOptions):
         fields = ('title', 'text')
@@ -332,7 +331,7 @@ The ``'default'`` key
 
 If you want the same kwargs for every language except a few, use the special
 ``'default'`` key.  It acts as a fallback for any language that does not have
-its own explicit entry:
+its own explicit entry::
 
     field_options = {
         'title': {
@@ -347,7 +346,7 @@ Multiple kwargs
 ---------------
 
 Any attribute that can be set on a Django model field after construction is
-accepted.  You can combine several in one entry:
+accepted.  You can combine several in one entry::
 
     field_options = {
         'title': {
@@ -426,6 +425,7 @@ Classes inheriting from ``TranslationOptions`` can have following attributes def
                 'en': {'db_collation': 'en-x-icu'},
                 'de': {'db_collation': 'de-x-icu'},
             }
+        }
 
 
 .. _supported_field_matrix:

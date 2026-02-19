@@ -135,7 +135,7 @@ class TranslationOptions(metaclass=FieldsAggregationMetaClass):
     required_languages: ClassVar[_ListOrTuple[str] | dict[str, _ListOrTuple[str]]] = (
         mt_settings.REQUIRED_LANGUAGES
     )
-    field_options: dict = {}
+    field_options: ClassVar[dict[str, dict[str, dict[str, object]]]] = {}
 
     def __init__(self, model: type[Model]) -> None:
         """
@@ -232,7 +232,7 @@ def add_translation_fields(model: type[Model], opts: TranslationOptions) -> None
             lang_kwargs = per_field_opts.get(lang, per_field_opts.get("default", {}))
             for attr, value in lang_kwargs.items():
                 setattr(translation_field, attr, value)
-            translation_field._field_options_kwargs = lang_kwargs
+            translation_field._field_options_kwargs = lang_kwargs.copy()
             # Construct the name for the localized field
             localized_field_name = build_localized_fieldname(field_name, lang)
             # Check if the model already has a field by that name
