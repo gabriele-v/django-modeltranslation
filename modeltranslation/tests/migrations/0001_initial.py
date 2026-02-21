@@ -1602,4 +1602,41 @@ class Migration(migrations.Migration):
             ],
             bases=("tests.multitablemodelb",),
         ),
+        migrations.CreateModel(
+            name="FieldOptionsModel",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255, verbose_name="title")),
+                ("title_de", models.CharField(max_length=255, null=True, verbose_name="title", db_index=False)),
+                ("title_en", models.CharField(max_length=255, null=True, verbose_name="title", db_index=True)),
+                ("slug", models.SlugField(blank=True)),
+                ("slug_de", models.SlugField(blank=True, null=True, db_index=True)),
+                ("slug_en", models.SlugField(blank=True, null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name="ChildFieldOptionsModel",
+            fields=[
+                (
+                    "fieldoptionsmodel_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="tests.fieldoptionsmodel",
+                    ),
+                ),
+            ],
+            bases=("tests.fieldoptionsmodel",),
+        ),
     ]
