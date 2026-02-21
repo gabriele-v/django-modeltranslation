@@ -27,6 +27,11 @@ class UniqueNullableTranslationOptions(TranslationOptions):
 @register(models.ModelWithConstraint)
 class ModelWithConstrainTranslationOptions(TranslationOptions):
     fields = ("sub_title",)
+    
+    
+@register(models.ModelWithIndex)
+class ModelWithIndexTranslationOptions(TranslationOptions):
+    fields = ("title", "sub_title")
 
 
 # ######### Proxy model testing

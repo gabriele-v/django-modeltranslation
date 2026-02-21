@@ -951,6 +951,38 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name="ModelWithIndex",
+            fields=[
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("title_de", models.CharField(max_length=255, null=True)),
+                ("title_en", models.CharField(max_length=255, null=True)),
+                ("sub_title", models.CharField(max_length=255)),
+                ("sub_title_de", models.CharField(max_length=255, null=True)),
+                ("sub_title_en", models.CharField(max_length=255, null=True)),
+                ("email", models.EmailField(blank=True, max_length=254, null=True)),
+            ],
+            options={
+                "indexes": [
+                    models.Index(fields=["title_en"], name="idx_title_en"),
+                    models.Index(fields=["title_de"], name="idx_title_de"),
+                    models.Index(fields=["title_en", "sub_title_en"], name="idx_title_sub_title_en"),
+                    models.Index(fields=["title_de", "sub_title_de"], name="idx_title_sub_title_de"),
+                    models.Index(fields=["sub_title_en"]),
+                    models.Index(fields=["sub_title_de"]),
+                    models.Index(fields=["email"], name="idx_email"),
+                ],
+            },
+        ),
+        migrations.CreateModel(
             name="ModelXY",
             fields=[
                 (
