@@ -300,7 +300,7 @@ which accepts the same values as `required_languages` class variable.
 Per-Language Field Options (``field_options``)
 ==============================================
 
-.. versionadded:: (next release)
+.. versionadded:: (0.20)
 
 By default, modeltranslation generates one translation field per language by
 cloning the original field.  Some database-level attributes (most notably
